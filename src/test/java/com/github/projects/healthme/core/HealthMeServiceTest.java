@@ -47,7 +47,4 @@ public class HealthMeServiceTest {
     public void canCountResiduarySteps() {
         assertEquals(5000, healthMeService.countResiduarySteps());
     }
-
-    @Test
-    public void canCountCaloriesPercentage
 }
