@@ -1,20 +1,14 @@
-package com.javalab.healthme.core;
+package com.javalab.healthme.core.model;
 
 import java.time.LocalDate;
 
 /**
  * @author Mariia Lapovska
  */
-public class Day {
+public class DayRecord {
     private int consumedCalories;
     private int consumedWater;
     private int walkedSteps;
-
-    private LocalDate date;
-
-    public Day() {
-        date = LocalDate.now();
-    }
 
     public void eat(int calories) {
         consumedCalories += calories;
@@ -26,10 +20,6 @@ public class Day {
 
     public void walk(int steps) {
         walkedSteps += steps;
-    }
-
-    public LocalDate getDate() {
-        return date;
     }
 
     public int getConsumedCalories() {
