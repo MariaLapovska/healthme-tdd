@@ -6,8 +6,12 @@
           <option name="url" value="https://github.com/MariaLapovska/pizza-service.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/MariaLapovska/healthme-tdd" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="C:\Users\Mariia_Lapovska\Desktop\PizzaService" />
+    <option name="cloneParentDir" value="C:\Users\Mariia_Lapovska\Desktop\HealthMe" />
   </component>
 </application>
