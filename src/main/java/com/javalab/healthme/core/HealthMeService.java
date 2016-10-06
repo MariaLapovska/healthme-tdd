@@ -89,6 +89,21 @@ public class HealthMeService {
                 (DayRecord.class, "getWalkedSteps"));
     }
 
+    public int countResiduaryCalories(LocalDate date) throws Exception {
+        return countResiduary(date, date.plusDays(1), caloriesDayNorm,
+                getMethodByName(DayRecord.class, "getConsumedCalories"));
+    }
+
+    public int countResiduaryWater(LocalDate date) throws Exception {
+        return countResiduary(date, date.plusDays(1), waterDayNorm,
+                getMethodByName(DayRecord.class, "getConsumedWater"));
+    }
+
+    public int countResiduarySteps(LocalDate date) throws Exception {
+        return countResiduary(date, date.plusDays(1), stepsDayNorm,
+                getMethodByName(DayRecord.class, "getWalkedSteps"));
+    }
+
     public DayRecord getDayRecord(LocalDate date) {
         for (DayRecord dayRecord : dayRecords) {
             if (dayRecord.getDate().equals(date)) {

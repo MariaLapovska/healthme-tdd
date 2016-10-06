@@ -91,4 +91,22 @@ public class HealthMeServiceTest {
         assertEquals(2000, healthMeService.countResiduarySteps(date, date
                 .plusDays(2)));
     }
+
+    @Test
+    public void canCountResiduaryCaloriesForDay() throws Exception {
+        assertEquals(1500, healthMeService.countResiduaryCalories(date
+                .plusDays(1)));
+    }
+
+    @Test
+    public void canCountResiduaryWaterForDay() throws Exception {
+        assertEquals(1500, healthMeService.countResiduaryWater(date
+                .plusDays(1)));
+    }
+
+    @Test
+    public void canCountResiduaryStepsForDay() throws Exception {
+        assertEquals(3000, healthMeService.countResiduarySteps(date
+                .plusDays(1)));
+    }
 }
