@@ -1,10 +1,8 @@
 package com.javalab.healthme.core.model;
 
+import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
-import java.util.function.Function;
+import java.util.*;
 
 /**
  * @author Mariia Lapovska
@@ -18,7 +16,7 @@ public class HealthMeService {
     private int waterDayNorm;
     private int stepsDayNorm;
 
-    private NavigableMap<LocalDate, DayRecord> dayRecords = new TreeMap<>();
+    private List<DayRecord> dayRecords = new ArrayList<>();
 
     public HealthMeService() {
         caloriesDayNorm = DEFAULT_CALORIES;
@@ -59,70 +57,75 @@ public class HealthMeService {
         return (int) (steps * index);
     }
 
-    public int countResiduaryCalories(LocalDate from, LocalDate to) {
-        int residuaryCalories = 0;
-        NavigableMap<LocalDate, DayRecord> recordsInRange = dayRecords.subMap(from, true, to, true);
-
-        for (Map.Entry<LocalDate, DayRecord> recordEntry : recordsInRange.entrySet()) {
-            residuaryCalories += caloriesDayNorm - recordEntry.getValue().getConsumedCalories();
-        }
-
-        return residuaryCalories > 0 ? residuaryCalories : 0;
+    public int countResiduaryCalories(LocalDate from, LocalDate to) throws Exception {
+        return countResiduary(from, to, stepsDayNorm, getMethodByName(DayRecord.class, "getConsumedCalories"));
     }
 
-    public int countResiduaryWater(LocalDate from, LocalDate to) {
-        int residuaryWater = 0;
-        NavigableMap<LocalDate, DayRecord> recordsInRange = dayRecords.subMap(from, true, to, true);
-
-        for (Map.Entry<LocalDate, DayRecord> recordEntry : recordsInRange.entrySet()) {
-            residuaryWater += waterDayNorm - recordEntry.getValue().getConsumedWater();
-        }
-
-        return residuaryWater > 0 ? residuaryWater : 0;
+    public int countResiduaryWater(LocalDate from, LocalDate to) throws Exception  {
+        return countResiduary(from, to, stepsDayNorm, getMethodByName(DayRecord.class, "getConsumedWater"));
     }
 
-    public int countResiduarySteps(LocalDate from, LocalDate to) {
-        int residuarySteps = 0;
-        NavigableMap<LocalDate, DayRecord> recordsInRange = dayRecords.subMap(from, true, to, true);
-
-        for (Map.Entry<LocalDate, DayRecord> recordEntry : recordsInRange.entrySet()) {
-            residuarySteps += stepsDayNorm - recordEntry.getValue().getWalkedSteps();
-        }
-
-        return residuarySteps > 0 ? residuarySteps : 0;
+    public int countResiduarySteps(LocalDate from, LocalDate to) throws Exception  {
+        return countResiduary(from, to, stepsDayNorm, getMethodByName(DayRecord.class, "getWalkedSteps"));
     }
 
-    public Double countResiduaryCaloriesPercentage(LocalDate from, LocalDate to) {
+    public Double countResiduaryCaloriesPercentage(LocalDate from, LocalDate to) throws Exception {
         return (double) countResiduaryCalories(from, to) / caloriesDayNorm;
     }
 
-    public Double countResiduaryWaterPercentage(LocalDate from, LocalDate to) {
+    public Double countResiduaryWaterPercentage(LocalDate from, LocalDate to) throws Exception {
         return (double) countResiduaryWater(from, to) / waterDayNorm;
     }
 
-    public Double countResiduaryStepsPercentage(LocalDate from, LocalDate to) {
+    public Double countResiduaryStepsPercentage(LocalDate from, LocalDate to) throws Exception {
         return (double) countResiduarySteps(from, to) / stepsDayNorm;
+    }
+
+    private double periodMedian(LocalDate from, LocalDate to) {
+        //final int middleValue = (recordsInRange.size() % 2) == 0 ? 1 : ;
+
+
+        return 0;
+    }
+
+    public double periodEatingMedian(LocalDate from, LocalDate to) {
+        /*List<Double> weekPercentage = new ArrayList<>();
+        while (dateWeekAgo.isBefore(date)) {
+            weekPercentage.add(hundredPercents - leftForToday.apply(date));
+            date = date.minusDays(1);
+        }
+        weekPercentage.sort(Comparator.naturalOrder());
+        return weekPercentage.get(middleOfWeek);*/
+        return 0;
+    }
+
+    public double periodDrinkingMedian(LocalDate from, LocalDate to) {
+        return 0;
+    }
+
+    public double periodWalkingMedian(LocalDate from, LocalDate to) {
+        return 0;
     }
 
     public void eat(LocalDate date, int calories) {
         DayRecord dayRecord = getDayRecord(date);
 
         dayRecord.eat(calories);
-        dayRecords.put(date, dayRecord);
+        //dayRecords.put(date, dayRecord);
     }
 
     public void drink(LocalDate date, int milliliters) {
         DayRecord dayRecord = getDayRecord(date);
 
         dayRecord.drink(milliliters);
-        dayRecords.put(date, dayRecord);
+        //dayRecords.put(date, dayRecord);
     }
 
     public void walk(LocalDate date, int steps) {
         DayRecord dayRecord = getDayRecord(date);
 
         dayRecord.walk(steps);
-        dayRecords.put(date, dayRecord);
+        //dayRecords.put(date, dayRecord);
     }
 
     public int getCaloriesDayNorm() {
@@ -150,12 +153,27 @@ public class HealthMeService {
     }
 
     private DayRecord getDayRecord(LocalDate date) {
-        DayRecord dayRecord = dayRecords.get(date);
+        DayRecord dayRecord = null;//= dayRecords.get(date);
 
         if (dayRecord == null) {
             return new DayRecord();
         }
         return dayRecord;
+    }
+
+    private int countResiduary(LocalDate from, LocalDate to, int norm, Method method) throws Exception {
+        int residuary = 0;
+        /*NavigableMap<LocalDate, DayRecord> recordsInRange = dayRecords.subMap(from, true, to, true);
+
+        for (Map.Entry<LocalDate, DayRecord> recordEntry : recordsInRange.entrySet()) {
+            residuary += norm - (int) method.invoke(recordEntry.getValue());
+        }*/
+
+        return residuary > 0 ? residuary : 0;
+    }
+
+    private Method getMethodByName(Object obj, String methodName) throws Exception {
+        return obj.getClass().getMethod(methodName);
     }
 
     public enum Gender {

@@ -6,9 +6,15 @@ import java.time.LocalDate;
  * @author Mariia Lapovska
  */
 public class DayRecord {
+    private LocalDate date;
+
     private int consumedCalories;
     private int consumedWater;
     private int walkedSteps;
+
+    public DayRecord() {
+        date = LocalDate.now();
+    }
 
     public void eat(int calories) {
         consumedCalories += calories;
@@ -32,5 +38,9 @@ public class DayRecord {
 
     public int getWalkedSteps() {
         return walkedSteps;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }
