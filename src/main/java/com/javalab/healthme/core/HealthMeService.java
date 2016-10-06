@@ -1,5 +1,6 @@
 package com.javalab.healthme.core;
 
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.SortedSet;
@@ -10,8 +11,19 @@ import java.util.TreeSet;
  */
 public class HealthMeService {
 
-    private SortedSet<DayRecord> dayRecords = new TreeSet<>(new
-            DateComparator());
+    private int caloriesDayNorm;
+    private int waterDayNorm;
+    private int stepsDayNorm;
+
+    private SortedSet<DayRecord> dayRecords;
+
+    public HealthMeService(int caloriesDayNorm, int waterDayNorm, int
+            stepsDayNorm) {
+        this.caloriesDayNorm = caloriesDayNorm;
+        this.waterDayNorm = waterDayNorm;
+        this.stepsDayNorm = stepsDayNorm;
+        dayRecords = new TreeSet<>(new DateComparator());
+    }
 
     public int calculateCaloriesNorm(int weight, int height, int age, Gender
             gender) {
@@ -59,6 +71,24 @@ public class HealthMeService {
         dayRecord.walk(steps);
     }
 
+    public int countResiduaryCalories(LocalDate from, LocalDate to) throws
+            Exception {
+        return countResiduary(from, to, caloriesDayNorm, getMethodByName
+                (DayRecord.class, "getConsumedCalories"));
+    }
+
+    public int countResiduaryWater(LocalDate from, LocalDate to) throws
+            Exception {
+        return countResiduary(from, to, waterDayNorm, getMethodByName
+                (DayRecord.class, "getConsumedWater"));
+    }
+
+    public int countResiduarySteps(LocalDate from, LocalDate to) throws
+            Exception {
+        return countResiduary(from, to, stepsDayNorm, getMethodByName
+                (DayRecord.class, "getWalkedSteps"));
+    }
+
     public DayRecord getDayRecord(LocalDate date) {
         for (DayRecord dayRecord : dayRecords) {
             if (dayRecord.getDate().equals(date)) {
@@ -70,6 +100,25 @@ public class HealthMeService {
         dayRecords.add(dayRecord);
 
         return dayRecord;
+    }
+
+    private int countResiduary(LocalDate from, LocalDate to, int norm, Method
+            getResiduary) throws Exception {
+        int residuary = 0;
+
+        SortedSet<DayRecord> recordsInRange = dayRecords.subSet(getDayRecord
+                (from), getDayRecord((to)));
+
+        for (DayRecord dayRecord : recordsInRange) {
+            residuary += norm - (int) getResiduary.invoke(dayRecord);
+        }
+
+        return residuary > 0 ? residuary : 0;
+    }
+
+    private Method getMethodByName(Class<?> clazz, String methodName) throws
+            Exception {
+        return clazz.getMethod(methodName);
     }
 
     public enum Gender {

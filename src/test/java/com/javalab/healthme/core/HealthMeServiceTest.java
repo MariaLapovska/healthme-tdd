@@ -16,11 +16,26 @@ public class HealthMeServiceTest {
     private DateTimeFormatter formatter;
     private LocalDate date;
 
+    private void initHealthService() {
+        healthMeService.eat(LocalDate.parse("05.10.2016", formatter), 100);
+        healthMeService.drink(LocalDate.parse("05.10.2016", formatter), 400);
+        healthMeService.walk(LocalDate.parse("05.10.2016", formatter), 3000);
+
+        healthMeService.eat(LocalDate.parse("05.10.2016", formatter), 100);
+        healthMeService.drink(LocalDate.parse("05.10.2016", formatter), 400);
+        healthMeService.walk(LocalDate.parse("05.10.2016", formatter), 3000);
+
+        healthMeService.eat(LocalDate.parse("06.10.2016", formatter), 500);
+        healthMeService.drink(LocalDate.parse("06.10.2016", formatter), 500);
+        healthMeService.walk(LocalDate.parse("06.10.2016", formatter), 2000);
+    }
+
     @Before
     public void setUp() {
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         date = LocalDate.parse("05.10.2016", formatter);
-        healthMeService = new HealthMeService();
+        healthMeService = new HealthMeService(2000, 2000, 5000);
+        initHealthService();
     }
 
     @Test
@@ -43,22 +58,37 @@ public class HealthMeServiceTest {
 
     @Test
     public void canEat() {
-        healthMeService.eat(date, 200);
         assertEquals(200, healthMeService.getDayRecord(date)
                 .getConsumedCalories());
     }
 
     @Test
     public void canDrink() {
-        healthMeService.drink(date, 300);
-        assertEquals(300, healthMeService.getDayRecord(date)
+        assertEquals(800, healthMeService.getDayRecord(date)
                 .getConsumedWater());
     }
 
     @Test
     public void canWalk() {
-        healthMeService.walk(date, 800);
-        assertEquals(800, healthMeService.getDayRecord(date)
+        assertEquals(6000, healthMeService.getDayRecord(date)
                 .getWalkedSteps());
+    }
+
+    @Test
+    public void canCountResiduaryCaloriesForPeriod() throws Exception {
+        assertEquals(3300, healthMeService.countResiduaryCalories(date, date
+                .plusDays(2)));
+    }
+
+    @Test
+    public void canCountResiduaryWaterForPeriod() throws Exception {
+        assertEquals(2700, healthMeService.countResiduaryWater(date, date
+                .plusDays(2)));
+    }
+
+    @Test
+    public void canCountResiduaryStepsForPeriod() throws Exception {
+        assertEquals(2000, healthMeService.countResiduarySteps(date, date
+                .plusDays(2)));
     }
 }
