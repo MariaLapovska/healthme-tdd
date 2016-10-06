@@ -40,19 +40,19 @@ public class HealthMeServiceTest {
 
     @Test
     public void canCountCaloriesNorm() {
-        assertEquals(1370, healthMeService.calculateCaloriesNorm(60, 165, 20,
+        assertEquals(1370, HealthMeService.calculateCaloriesNorm(60, 165, 20,
                 HealthMeService.Gender.FEMALE));
     }
 
     @Test
     public void canCountWaterNorm() {
-        assertEquals(1860, healthMeService.calculateWaterNorm(60,
+        assertEquals(1860, HealthMeService.calculateWaterNorm(60,
                 HealthMeService.Gender.FEMALE));
     }
 
     @Test
     public void canCountStepsNorm() {
-        assertEquals(11000, healthMeService.calculateStepsNorm(20,
+        assertEquals(11000, HealthMeService.calculateStepsNorm(20,
                 HealthMeService.Gender.FEMALE));
     }
 

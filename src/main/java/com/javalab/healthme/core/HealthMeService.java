@@ -25,20 +25,20 @@ public class HealthMeService {
         dayRecords = new TreeSet<>(new DateComparator());
     }
 
-    public int calculateCaloriesNorm(int weight, int height, int age, Gender
+    public static int calculateCaloriesNorm(int weight, int height, int age, Gender
             gender) {
         int index = (gender == Gender.MALE) ? 5 : -161;
 
         return (int) (10 * weight + 6.25 * height - 5 * age + index);
     }
 
-    public int calculateWaterNorm(int weight, Gender gender) {
+    public static int calculateWaterNorm(int weight, Gender gender) {
         int index = (gender == Gender.MALE) ? 35 : 31;
 
         return weight * index;
     }
 
-    public int calculateStepsNorm(int age, Gender gender) {
+    public static int calculateStepsNorm(int age, Gender gender) {
         double index = (gender == Gender.MALE) ? 1.3 : 1.1;
         int steps;
 
