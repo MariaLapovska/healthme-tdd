@@ -89,6 +89,24 @@ public class HealthMeService {
                 (DayRecord.class, "getWalkedSteps"));
     }
 
+    public Double countResiduaryCaloriesPercentage(LocalDate from, LocalDate
+            to) throws Exception {
+        return (double) countResiduaryCalories(from, to) / (caloriesDayNorm *
+                getNumOfRecords(from, to));
+    }
+
+    public Double countResiduaryWaterPercentage(LocalDate from, LocalDate to)
+            throws Exception {
+        return (double) countResiduaryWater(from, to) / (waterDayNorm *
+                getNumOfRecords(from, to));
+    }
+
+    public Double countResiduaryStepsPercentage(LocalDate from, LocalDate to)
+            throws Exception {
+        return (double) countResiduarySteps(from, to) / (stepsDayNorm *
+                getNumOfRecords(from, to));
+    }
+
     public int countResiduaryCalories(LocalDate date) throws Exception {
         return countResiduary(date, date.plusDays(1), caloriesDayNorm,
                 getMethodByName(DayRecord.class, "getConsumedCalories"));
@@ -152,6 +170,10 @@ public class HealthMeService {
     private Method getMethodByName(Class<?> clazz, String methodName) throws
             Exception {
         return clazz.getMethod(methodName);
+    }
+
+    private int getNumOfRecords(LocalDate from, LocalDate to) {
+        return dayRecords.subSet(getDayRecord(from), getDayRecord(to)).size();
     }
 
     public enum Gender {

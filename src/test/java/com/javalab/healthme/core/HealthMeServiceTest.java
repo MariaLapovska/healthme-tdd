@@ -130,4 +130,22 @@ public class HealthMeServiceTest {
                 (date), precision);
     }
 
+    @Test
+    public void canCountResiduaryCaloriesPercentageForPeriod() throws
+            Exception {
+        assertEquals(0.825, healthMeService.countResiduaryCaloriesPercentage
+                (date, date.plusDays(2)), precision);
+    }
+
+    @Test
+    public void canCountResiduaryWaterPercentageForPeriod() throws Exception {
+        assertEquals(0.675, healthMeService.countResiduaryWaterPercentage
+                (date, date.plusDays(2)), precision);
+    }
+
+    @Test
+    public void canCountResiduaryStepsPercentageForPeriod() throws Exception {
+        assertEquals(0.2, healthMeService.countResiduaryStepsPercentage
+                (date, date.plusDays(2)), precision);
+    }
 }
