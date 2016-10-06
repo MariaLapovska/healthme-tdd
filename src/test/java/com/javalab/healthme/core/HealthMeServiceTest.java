@@ -12,6 +12,8 @@ import static org.junit.Assert.assertEquals;
  * @author Mariia Lapovska
  */
 public class HealthMeServiceTest {
+    private final double precision = 0.0001;
+
     private HealthMeService healthMeService;
     private DateTimeFormatter formatter;
     private LocalDate date;
@@ -109,4 +111,23 @@ public class HealthMeServiceTest {
         assertEquals(3000, healthMeService.countResiduarySteps(date
                 .plusDays(1)));
     }
+
+    @Test
+    public void canCountResiduaryCaloriesPercentageForDay() throws Exception {
+        assertEquals(0.9, healthMeService.countResiduaryCaloriesPercentage
+                (date), precision);
+    }
+
+    @Test
+    public void canCountResiduaryWaterPercentageForDay() throws Exception {
+        assertEquals(0.6, healthMeService.countResiduaryWaterPercentage
+                (date), precision);
+    }
+
+    @Test
+    public void canCountResiduaryStepsPercentageForDay() throws Exception {
+        assertEquals(0.0, healthMeService.countResiduaryStepsPercentage
+                (date), precision);
+    }
+
 }
