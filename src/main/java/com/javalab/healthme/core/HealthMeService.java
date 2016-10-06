@@ -2,9 +2,7 @@ package com.javalab.healthme.core;
 
 import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author Mariia Lapovska
@@ -25,8 +23,9 @@ public class HealthMeService {
         dayRecords = new TreeSet<>(new DateComparator());
     }
 
-    public static int calculateCaloriesNorm(int weight, int height, int age, Gender
-            gender) {
+    public static int calculateCaloriesNorm(int weight, int height, int age,
+                                            Gender
+                                                    gender) {
         int index = (gender == Gender.MALE) ? 5 : -161;
 
         return (int) (10 * weight + 6.25 * height - 5 * age + index);
@@ -140,6 +139,24 @@ public class HealthMeService {
                 stepsDayNorm;
     }
 
+    public double periodEatingMedian(LocalDate from, LocalDate to) throws
+            Exception {
+        return periodMedian(from, to, getMethodByName(DayRecord.class,
+                "getConsumedCalories"));
+    }
+
+    public double periodDrinkingMedian(LocalDate from, LocalDate to) throws
+            Exception {
+        return periodMedian(from, to, getMethodByName(DayRecord.class,
+                "getConsumedWater"));
+    }
+
+    public double periodWalkingMedian(LocalDate from, LocalDate to) throws
+            Exception {
+        return periodMedian(from, to, getMethodByName(DayRecord.class,
+                "getWalkedSteps"));
+    }
+
     public DayRecord getDayRecord(LocalDate date) {
         for (DayRecord dayRecord : dayRecords) {
             if (dayRecord.getDate().equals(date)) {
@@ -174,6 +191,27 @@ public class HealthMeService {
 
     private int getNumOfRecords(LocalDate from, LocalDate to) {
         return dayRecords.subSet(getDayRecord(from), getDayRecord(to)).size();
+    }
+
+    private double periodMedian(LocalDate from, LocalDate to, Method
+            getConsumed) throws Exception {
+        SortedSet<DayRecord> recordsInRange = dayRecords.subSet(getDayRecord
+                (from), getDayRecord((to)));
+        List<Integer> periodData = new ArrayList<>();
+
+        for (DayRecord dayRecord : recordsInRange) {
+            periodData.add((int) getConsumed.invoke(dayRecord));
+        }
+
+        periodData.sort(Comparator.naturalOrder());
+        int size = periodData.size();
+
+        if ((size % 2) != 0) {
+            return periodData.get(size / 2);
+        } else {
+            return ((double) (periodData.get((size / 2) - 1) + periodData.get
+                    (size / 2)) / 2);
+        }
     }
 
     public enum Gender {

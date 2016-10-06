@@ -30,6 +30,26 @@ public class HealthMeServiceTest {
         healthMeService.eat(LocalDate.parse("06.10.2016", formatter), 500);
         healthMeService.drink(LocalDate.parse("06.10.2016", formatter), 500);
         healthMeService.walk(LocalDate.parse("06.10.2016", formatter), 2000);
+
+        healthMeService.eat(LocalDate.parse("07.10.2016", formatter), 300);
+        healthMeService.drink(LocalDate.parse("07.10.2016", formatter), 700);
+        healthMeService.walk(LocalDate.parse("07.10.2016", formatter), 8000);
+
+        healthMeService.eat(LocalDate.parse("08.10.2016", formatter), 2500);
+        healthMeService.drink(LocalDate.parse("08.10.2016", formatter), 600);
+        healthMeService.walk(LocalDate.parse("08.10.2016", formatter), 10000);
+
+        healthMeService.eat(LocalDate.parse("09.10.2016", formatter), 500);
+        healthMeService.drink(LocalDate.parse("09.10.2016", formatter), 1000);
+        healthMeService.walk(LocalDate.parse("09.10.2016", formatter), 3000);
+
+        healthMeService.eat(LocalDate.parse("10.10.2016", formatter), 700);
+        healthMeService.drink(LocalDate.parse("10.10.2016", formatter), 3000);
+        healthMeService.walk(LocalDate.parse("10.10.2016", formatter), 4500);
+
+        healthMeService.eat(LocalDate.parse("11.10.2016", formatter), 650);
+        healthMeService.drink(LocalDate.parse("11.10.2016", formatter), 1200);
+        healthMeService.walk(LocalDate.parse("11.10.2016", formatter), 3200);
     }
 
     @Before
@@ -147,5 +167,41 @@ public class HealthMeServiceTest {
     public void canCountResiduaryStepsPercentageForPeriod() throws Exception {
         assertEquals(0.2, healthMeService.countResiduaryStepsPercentage
                 (date, date.plusDays(2)), precision);
+    }
+
+    @Test
+    public void canCountEatingMedianForWeek() throws Exception {
+        assertEquals(500, healthMeService.periodEatingMedian(date, date
+                .plusDays(7)), precision);
+    }
+
+    @Test
+    public void canCountEatingMedianForSixDays() throws Exception {
+        assertEquals(575, healthMeService.periodEatingMedian(date.plusDays(1)
+                , date.plusDays(7)), precision);
+    }
+
+    @Test
+    public void canCountDrinkingMedianForWeek() throws Exception {
+        assertEquals(800, healthMeService.periodDrinkingMedian(date, date
+                .plusDays(7)), precision);
+    }
+
+    @Test
+    public void canCountDrinkingMedianForSixDays() throws Exception {
+        assertEquals(850, healthMeService.periodDrinkingMedian(date.plusDays(1)
+                , date.plusDays(7)), precision);
+    }
+
+    @Test
+    public void canCountWalkingMedianForWeek() throws Exception {
+        assertEquals(4500, healthMeService.periodWalkingMedian(date, date
+                .plusDays(7)), precision);
+    }
+
+    @Test
+    public void canCountWalkingMedianForSixDays() throws Exception {
+        assertEquals(3850, healthMeService.periodWalkingMedian(date.plusDays(1)
+                , date.plusDays(7)), precision);
     }
 }
