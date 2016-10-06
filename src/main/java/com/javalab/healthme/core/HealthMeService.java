@@ -1,9 +1,17 @@
 package com.javalab.healthme.core;
 
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 /**
  * @author Mariia Lapovska
  */
 public class HealthMeService {
+
+    private SortedSet<DayRecord> dayRecords = new TreeSet<>(new
+            DateComparator());
 
     public int calculateCaloriesNorm(int weight, int height, int age, Gender
             gender) {
@@ -33,7 +41,45 @@ public class HealthMeService {
         return (int) (steps * index);
     }
 
+    public void eat(LocalDate date, int calories) {
+        DayRecord dayRecord = getDayRecord(date);
+
+        dayRecord.eat(calories);
+    }
+
+    public void drink(LocalDate date, int milliliters) {
+        DayRecord dayRecord = getDayRecord(date);
+
+        dayRecord.drink(milliliters);
+    }
+
+    public void walk(LocalDate date, int steps) {
+        DayRecord dayRecord = getDayRecord(date);
+
+        dayRecord.walk(steps);
+    }
+
+    public DayRecord getDayRecord(LocalDate date) {
+        for (DayRecord dayRecord : dayRecords) {
+            if (dayRecord.getDate().equals(date)) {
+                return dayRecord;
+            }
+        }
+
+        DayRecord dayRecord = new DayRecord(date);
+        dayRecords.add(dayRecord);
+
+        return dayRecord;
+    }
+
     public enum Gender {
         MALE, FEMALE
+    }
+
+    private class DateComparator implements Comparator<DayRecord> {
+        @Override
+        public int compare(DayRecord a, DayRecord b) {
+            return a.getDate().compareTo(b.getDate());
+        }
     }
 }
