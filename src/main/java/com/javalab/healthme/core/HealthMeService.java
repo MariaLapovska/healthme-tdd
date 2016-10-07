@@ -88,19 +88,19 @@ public class HealthMeService {
                 (DayRecord.class, "getWalkedSteps"));
     }
 
-    public Double countResiduaryCaloriesPercentage(LocalDate from, LocalDate
+    public double countResiduaryCaloriesPercentage(LocalDate from, LocalDate
             to) throws Exception {
         return (double) countResiduaryCalories(from, to) / (caloriesDayNorm *
                 getNumOfRecords(from, to));
     }
 
-    public Double countResiduaryWaterPercentage(LocalDate from, LocalDate to)
+    public double countResiduaryWaterPercentage(LocalDate from, LocalDate to)
             throws Exception {
         return (double) countResiduaryWater(from, to) / (waterDayNorm *
                 getNumOfRecords(from, to));
     }
 
-    public Double countResiduaryStepsPercentage(LocalDate from, LocalDate to)
+    public double countResiduaryStepsPercentage(LocalDate from, LocalDate to)
             throws Exception {
         return (double) countResiduarySteps(from, to) / (stepsDayNorm *
                 getNumOfRecords(from, to));
@@ -121,19 +121,19 @@ public class HealthMeService {
                 getMethodByName(DayRecord.class, "getWalkedSteps"));
     }
 
-    public Double countResiduaryCaloriesPercentage(LocalDate date) throws
+    public double countResiduaryCaloriesPercentage(LocalDate date) throws
             Exception {
         return (double) countResiduaryCalories(date, date.plusDays(1)) /
                 caloriesDayNorm;
     }
 
-    public Double countResiduaryWaterPercentage(LocalDate date) throws
+    public double countResiduaryWaterPercentage(LocalDate date) throws
             Exception {
         return (double) countResiduaryWater(date, date.plusDays(1)) /
                 waterDayNorm;
     }
 
-    public Double countResiduaryStepsPercentage(LocalDate date) throws
+    public double countResiduaryStepsPercentage(LocalDate date) throws
             Exception {
         return (double) countResiduarySteps(date, date.plusDays(1)) /
                 stepsDayNorm;
